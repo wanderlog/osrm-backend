@@ -437,12 +437,17 @@ function WayHandlers.maxspeed(profile,way,result,data)
   forward = WayHandlers.parse_maxspeed(forward,profile)
   backward = WayHandlers.parse_maxspeed(backward,profile)
 
+  speed_reduction = profile.speed_reduction
+  if data.highway == 'motorway' then
+    speed_reduction = 1
+  end
+
   if forward and forward > 0 then
-    result.forward_speed = forward * profile.speed_reduction
+    result.forward_speed = forward * speed_reduction
   end
 
   if backward and backward > 0 then
-    result.backward_speed = backward * profile.speed_reduction
+    result.backward_speed = backward * speed_reduction
   end
 end
 

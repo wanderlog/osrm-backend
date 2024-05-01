@@ -110,7 +110,7 @@ class ContiguousInternalMemoryDataFacade<routing_algorithms::offline::Algorithm>
 
     ~ContiguousInternalMemoryDataFacade() override {}
 
-    unsigned GetNumberOfNodes() const { return 0; }
+    NodeID GetNumberOfNodes() const { return 0; }
 
     NodeID GetTarget(const EdgeID /*edgeID*/) const { return 0; }
 

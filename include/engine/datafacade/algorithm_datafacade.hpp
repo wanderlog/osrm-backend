@@ -30,9 +30,9 @@ template <> class AlgorithmDataFacade<CH>
     virtual ~AlgorithmDataFacade() = default;
 
     // search graph access
-    virtual unsigned GetNumberOfNodes() const = 0;
+    virtual NodeID GetNumberOfNodes() const = 0;
 
-    virtual unsigned GetNumberOfEdges() const = 0;
+    virtual EdgeID GetNumberOfEdges() const = 0;
 
     virtual unsigned GetOutDegree(const NodeID edge_based_node_id) const = 0;
 
@@ -67,11 +67,11 @@ template <> class AlgorithmDataFacade<MLD>
     virtual ~AlgorithmDataFacade() = default;
 
     // search graph access
-    virtual unsigned GetNumberOfNodes() const = 0;
+    virtual NodeID GetNumberOfNodes() const = 0;
 
-    virtual unsigned GetMaxBorderNodeID() const = 0;
+    virtual NodeID GetMaxBorderNodeID() const = 0;
 
-    virtual unsigned GetNumberOfEdges() const = 0;
+    virtual EdgeID GetNumberOfEdges() const = 0;
 
     virtual unsigned GetOutDegree(const NodeID edge_based_node_id) const = 0;
 

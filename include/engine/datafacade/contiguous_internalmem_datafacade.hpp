@@ -65,9 +65,9 @@ class ContiguousInternalMemoryAlgorithmDataFacade<CH> : public datafacade::Algor
     }
 
     // search graph access
-    unsigned GetNumberOfNodes() const override final { return m_query_graph.GetNumberOfNodes(); }
+    NodeID GetNumberOfNodes() const override final { return m_query_graph.GetNumberOfNodes(); }
 
-    unsigned GetNumberOfEdges() const override final { return m_query_graph.GetNumberOfEdges(); }
+    EdgeID GetNumberOfEdges() const override final { return m_query_graph.GetNumberOfEdges(); }
 
     unsigned GetOutDegree(const NodeID edge_based_node_id) const override final
     {
@@ -609,11 +609,11 @@ template <> class ContiguousInternalMemoryAlgorithmDataFacade<MLD> : public Algo
     const customizer::CellMetricView &GetCellMetric() const override { return mld_cell_metric; }
 
     // search graph access
-    unsigned GetNumberOfNodes() const override final { return query_graph.GetNumberOfNodes(); }
+    NodeID GetNumberOfNodes() const override final { return query_graph.GetNumberOfNodes(); }
 
-    unsigned GetMaxBorderNodeID() const override final { return query_graph.GetMaxBorderNodeID(); }
+    NodeID GetMaxBorderNodeID() const override final { return query_graph.GetMaxBorderNodeID(); }
 
-    unsigned GetNumberOfEdges() const override final { return query_graph.GetNumberOfEdges(); }
+    EdgeID GetNumberOfEdges() const override final { return query_graph.GetNumberOfEdges(); }
 
     unsigned GetOutDegree(const NodeID edge_based_node_id) const override final
     {

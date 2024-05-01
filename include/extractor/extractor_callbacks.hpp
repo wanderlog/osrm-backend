@@ -61,7 +61,7 @@ class ExtractorCallbacks
     // used to deduplicate street names, refs, destinations, pronunciation, exits:
     // actually maps to name ids
     using MapKey = std::tuple<std::string, std::string, std::string, std::string, std::string>;
-    using MapVal = unsigned;
+    using MapVal = NameID;
     using StringMap = std::unordered_map<MapKey, MapVal>;
     StringMap string_map;
     ExtractionContainers &external_memory;

@@ -45,7 +45,11 @@ struct QueryEdge
         // this ID is either the middle node of the shortcut, or the ID of the edge based node (node
         // based edge) storing the appropriate data. If `shortcut` is set to true, we get the middle
         // node. Otherwise we see the edge based node to access node data.
+        #ifdef USE_64BIT_IDS
+        NodeID turn_id : 63;
+        #else
         NodeID turn_id : 31;
+        #endif
         bool shortcut : 1;
         EdgeWeight weight;
         EdgeDuration::value_type duration : 30;

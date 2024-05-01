@@ -68,7 +68,9 @@ void partitionLevel(const std::vector<BisectionID> &node_to_bisection_id,
                                     return lhs | node_to_bisection_id[rhs];
                                 });
             // masks all bit strictly higher then cell.bit
-            BOOST_ASSERT(sizeof(unsigned long long) * CHAR_BIT > sizeof(BisectionID) * CHAR_BIT);
+            BOOST_ASSERT(sizeof(unsigned long long) * CHAR_BIT >= sizeof(BisectionID) * CHAR_BIT);
+            // We want the mask to be the same size as the BisectionID, except
+            // with the leftmost bits all 0s and rightmost bits all 1s
             const BisectionID mask = (1ULL << (cell.bit + 1)) - 1;
             BOOST_ASSERT(mask == 0 || util::msb(mask) == cell.bit);
             const auto masked_sum = sum & mask;

@@ -19,7 +19,7 @@ void printCellStatistics(const Partition &partition, const CellStorage &storage)
         std::size_t source = 0, destination = 0;
         std::size_t boundary_nodes = 0;
         std::size_t entries = 0;
-        for (std::uint32_t cell_id = 0; cell_id < num_cells; ++cell_id)
+        for (CellID cell_id = 0; cell_id < num_cells; ++cell_id)
         {
             std::unordered_set<NodeID> boundary;
             const auto &cell = storage.GetUnfilledCell(level, cell_id);

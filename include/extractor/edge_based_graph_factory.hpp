@@ -52,7 +52,11 @@ struct TurnIndexBlock
 };
 #pragma pack(pop)
 static_assert(std::is_trivial<TurnIndexBlock>::value, "TurnIndexBlock is not trivial");
-static_assert(sizeof(TurnIndexBlock) == 12, "TurnIndexBlock is not packed correctly");
+#ifdef USE_64BIT_IDS
+    static_assert(sizeof(TurnIndexBlock) == 24, "TurnIndexBlock is not packed correctly");
+#else
+    static_assert(sizeof(TurnIndexBlock) == 12, "TurnIndexBlock is not packed correctly");
+#endif
 } // namespace lookup
 
 struct NodeBasedGraphToEdgeBasedGraphMappingWriter; // fwd. decl

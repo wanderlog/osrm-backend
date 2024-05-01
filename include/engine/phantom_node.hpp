@@ -222,7 +222,11 @@ struct PhantomNode
     unsigned short bearing : 12;
 };
 
+#ifdef USE_64BIT_IDS
+static_assert(sizeof(PhantomNode) == 96, "PhantomNode has more padding then expected");
+#else
 static_assert(sizeof(PhantomNode) == 80, "PhantomNode has more padding then expected");
+#endif
 
 using PhantomNodeCandidates = std::vector<PhantomNode>;
 using PhantomCandidateAlternatives = std::pair<PhantomNodeCandidates, PhantomNodeCandidates>;

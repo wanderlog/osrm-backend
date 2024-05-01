@@ -14,12 +14,12 @@
 
 namespace osrm::partitioner
 {
-std::vector<std::uint32_t> makePermutation(const DynamicEdgeBasedGraph &graph,
+std::vector<NodeID> makePermutation(const DynamicEdgeBasedGraph &graph,
                                            const std::vector<Partition> &partitions);
 
 template <typename EdgeDataT>
 inline void renumber(util::DynamicGraph<EdgeDataT> &graph,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     // dynamic graph has own specilization
     graph.Renumber(permutation);
@@ -27,20 +27,20 @@ inline void renumber(util::DynamicGraph<EdgeDataT> &graph,
 
 template <typename EdgeDataT>
 inline void renumber(util::StaticGraph<EdgeDataT> &graph,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     // static graph has own specilization
     graph.Renumber(permutation);
 }
 
 inline void renumber(extractor::EdgeBasedNodeDataContainer &node_data_container,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     node_data_container.Renumber(permutation);
 }
 
 inline void renumber(std::vector<Partition> &partitions,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     for (auto &partition : partitions)
     {
@@ -49,7 +49,7 @@ inline void renumber(std::vector<Partition> &partitions,
 }
 
 inline void renumber(util::vector_view<extractor::EdgeBasedNodeSegment> &segments,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     for (auto &segment : segments)
     {
@@ -61,7 +61,7 @@ inline void renumber(util::vector_view<extractor::EdgeBasedNodeSegment> &segment
 }
 
 inline void renumber(std::vector<extractor::NBGToEBG> &mapping,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     for (extractor::NBGToEBG &m : mapping)
     {
@@ -72,7 +72,7 @@ inline void renumber(std::vector<extractor::NBGToEBG> &mapping,
     }
 }
 
-inline void renumber(std::vector<NodeID> &node_ids, const std::vector<std::uint32_t> &permutation)
+inline void renumber(std::vector<NodeID> &node_ids, const std::vector<NodeID> &permutation)
 {
     for (auto &node_id : node_ids)
     {
@@ -82,7 +82,7 @@ inline void renumber(std::vector<NodeID> &node_ids, const std::vector<std::uint3
 }
 
 inline void renumber(std::vector<extractor::StorageManeuverOverride> &maneuver_overrides,
-                     const std::vector<std::uint32_t> &permutation)
+                     const std::vector<NodeID> &permutation)
 {
     for (auto &maneuver_override : maneuver_overrides)
     {

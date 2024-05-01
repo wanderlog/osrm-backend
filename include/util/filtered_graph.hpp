@@ -6,6 +6,7 @@
 #include "util/dynamic_graph.hpp"
 #include "util/filtered_integer_range.hpp"
 #include "util/static_graph.hpp"
+#include "util/typedefs.hpp"
 #include "util/vector_view.hpp"
 
 namespace osrm::util
@@ -30,9 +31,9 @@ class FilteredGraphImpl<util::StaticGraph<EdgeDataT, Ownership>, Ownership>
     using EdgeArrayEntry = typename Graph::EdgeArrayEntry;
     using EdgeRange = util::filtered_range<EdgeIterator, Vector<bool>>;
 
-    unsigned GetNumberOfNodes() const { return graph.GetNumberOfNodes(); }
+    NodeID GetNumberOfNodes() const { return graph.GetNumberOfNodes(); }
 
-    unsigned GetNumberOfEdges() const { return graph.GetNumberOfEdges(); }
+    EdgeID GetNumberOfEdges() const { return graph.GetNumberOfEdges(); }
 
     unsigned GetOutDegree(const NodeIterator n) const
     {

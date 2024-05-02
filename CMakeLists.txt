@@ -35,6 +35,7 @@ option(ENABLE_LTO "Use LTO if available" OFF)
 option(ENABLE_FUZZING "Fuzz testing using LLVM's libFuzzer" OFF)
 option(ENABLE_NODE_BINDINGS "Build NodeJs bindings" OFF)
 option(ENABLE_CLANG_TIDY "Enables clang-tidy checks" OFF)
+option(USE_64BIT_IDS "Whether to use 64-bit node and edge IDs" OFF)
 
 if (ENABLE_CLANG_TIDY)
   find_program(CLANG_TIDY_COMMAND NAMES clang-tidy)
@@ -87,6 +88,13 @@ if (MSVC)
   add_definitions("-DOSRM_PROJECT_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
 else()
   add_definitions(-DOSRM_PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+endif()
+
+if(USE_64BIT_IDS)
+  add_definitions(-DUSE_64BIT_IDS)
+  message(STATUS "Using 64-bit node and edge IDs")
+else()
+  message(STATUS "Using 32-bit node and edge IDs")
 endif()
 
 # these two functions build up custom variables:
@@ -151,7 +159,7 @@ add_library(UPDATER OBJECT ${UpdaterGlob})
 add_library(STORAGE OBJECT ${StorageGlob})
 add_library(ENGINE OBJECT ${EngineGlob})
 
-if (BUILD_ROUTED) 
+if (BUILD_ROUTED)
   add_library(SERVER OBJECT ${ServerGlob})
   add_executable(osrm-routed src/tools/routed.cpp $<TARGET_OBJECTS:SERVER> $<TARGET_OBJECTS:UTIL>)
 endif()
@@ -309,7 +317,7 @@ add_subdirectory(${FLATBUFFERS_SRC_DIR}
 set(FMT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt-9.1.0/include")
 add_compile_definitions(FMT_HEADER_ONLY)
 include_directories(SYSTEM ${FMT_INCLUDE_DIR})
-        
+
 
 # see https://stackoverflow.com/questions/70898030/boost-link-error-using-conan-find-package
 if (MSVC)
@@ -319,7 +327,7 @@ endif()
 if(ENABLE_CONAN)
   message(STATUS "Installing dependencies via Conan")
 
-  # Conan will generate Find*.cmake files to build directory, so we use them with the highest priority 
+  # Conan will generate Find*.cmake files to build directory, so we use them with the highest priority
   list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_BINARY_DIR})
   list(INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR})
 
@@ -330,11 +338,11 @@ if(ENABLE_CONAN)
   set(CONAN_EXPAT_VERSION "2.2.10#916908d4a570ad839edd25322c3268cd")
   set(CONAN_LUA_VERSION "5.4.4#3ec62efc37cd0a5d80b9e5cb35277360")
   set(CONAN_TBB_VERSION "2021.3.0#507ec17cbd51a84167e143b20d170eea")
-  
+
   set(CONAN_SYSTEM_INCLUDES ON)
 
-  # TODO: 
-  # if we link TBB dynamically osrm-extract.exe finishes on the first access to any TBB symbol 
+  # TODO:
+  # if we link TBB dynamically osrm-extract.exe finishes on the first access to any TBB symbol
   # with exit code = -1073741515, which means that program cannot load required DLL.
   if (MSVC)
     set(TBB_SHARED False)
@@ -342,14 +350,14 @@ if(ENABLE_CONAN)
     set(TBB_SHARED True)
   endif()
 
-  set(CONAN_ARGS       
-    REQUIRES 
+  set(CONAN_ARGS
+    REQUIRES
     "boost/${CONAN_BOOST_VERSION}"
     "bzip2/${CONAN_BZIP2_VERSION}"
     "expat/${CONAN_EXPAT_VERSION}"
     "lua/${CONAN_LUA_VERSION}"
     "onetbb/${CONAN_TBB_VERSION}"
-    BASIC_SETUP 
+    BASIC_SETUP
     GENERATORS cmake_find_package json  # json generator generates a conanbuildinfo.json in the build folder so (non-CMake) projects can easily parse OSRM's dependencies
     KEEP_RPATHS
     NO_OUTPUT_DIRS
@@ -386,7 +394,7 @@ if(ENABLE_CONAN)
   set(Boost_ZLIB_LIBRARY "${Boost_zlib_LIB_TARGETS}")
   set(Boost_REGEX_LIBRARY "${Boost_regex_LIB_TARGETS}")
   set(Boost_UNIT_TEST_FRAMEWORK_LIBRARY "${Boost_unit_test_framework_LIB_TARGETS}")
-  
+
 
   find_package(BZip2 REQUIRED)
   find_package(EXPAT REQUIRED)
@@ -730,23 +738,23 @@ if (ENABLE_FUZZING)
   add_subdirectory(fuzz)
 endif ()
 
-# add headers sanity check target that includes all headers independently	
-set(check_headers_dir "${PROJECT_BINARY_DIR}/check-headers")	
-file(GLOB_RECURSE headers_to_check	
-  ${PROJECT_BINARY_DIR}/*.hpp	
-  ${PROJECT_SOURCE_DIR}/include/*.hpp)	
-foreach(header ${headers_to_check})	
+# add headers sanity check target that includes all headers independently
+set(check_headers_dir "${PROJECT_BINARY_DIR}/check-headers")
+file(GLOB_RECURSE headers_to_check
+  ${PROJECT_BINARY_DIR}/*.hpp
+  ${PROJECT_SOURCE_DIR}/include/*.hpp)
+foreach(header ${headers_to_check})
   if ("${header}" MATCHES ".*/include/nodejs/.*")
     # we do not check NodeJS bindings headers
     continue()
   endif()
-  get_filename_component(filename ${header} NAME_WE)	
-  set(filename "${check_headers_dir}/${filename}.cpp")	
-  if (NOT EXISTS ${filename})	
-    file(WRITE ${filename} "#include \"${header}\"\n")	
-  endif()	
-  list(APPEND sources ${filename})	
-endforeach()	
-add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources})	
-set_target_properties(check-headers PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${check_headers_dir})	
+  get_filename_component(filename ${header} NAME_WE)
+  set(filename "${check_headers_dir}/${filename}.cpp")
+  if (NOT EXISTS ${filename})
+    file(WRITE ${filename} "#include \"${header}\"\n")
+  endif()
+  list(APPEND sources ${filename})
+endforeach()
+add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources})
+set_target_properties(check-headers PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${check_headers_dir})
 

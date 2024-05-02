@@ -41,7 +41,7 @@ void printUnreachableStatistics(const Partition &partition,
         auto num_cells = partition.GetNumberOfCells(level);
         std::size_t invalid_sources = 0;
         std::size_t invalid_destinations = 0;
-        for (std::uint32_t cell_id = 0; cell_id < num_cells; ++cell_id)
+        for (CellID cell_id = 0; cell_id < num_cells; ++cell_id)
         {
             const auto &cell = storage.GetCell(metric, level, cell_id);
             for (auto node : cell.GetSourceNodes())

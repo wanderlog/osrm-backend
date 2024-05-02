@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <boost/assert.hpp>
 
+#include <atomic>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -91,11 +92,21 @@ static const OSMNodeID MIN_OSM_NODEID =
 static const OSMWayID MAX_OSM_WAYID = OSMWayID{std::numeric_limits<OSMWayID::value_type>::max()};
 static const OSMWayID MIN_OSM_WAYID = OSMWayID{std::numeric_limits<OSMWayID::value_type>::min()};
 
-using NodeID = std::uint32_t;
-using EdgeID = std::uint32_t;
-using NameID = std::uint32_t;
-using AnnotationID = std::uint32_t;
-using PackedGeometryID = std::uint32_t;
+#ifdef USE_64BIT_IDS
+    using NodeID = std::uint64_t;
+    using EdgeID = std::uint64_t;
+    using AtomicEdgeID = std::atomic_ulong;
+    using NameID = std::uint64_t;
+    using AnnotationID = std::uint64_t;
+    using PackedGeometryID = std::uint64_t;
+#else
+    using NodeID = std::uint32_t;
+    using EdgeID = std::uint32_t;
+    using AtomicEdgeID = std::atomic_uint;
+    using NameID = std::uint32_t;
+    using AnnotationID = std::uint32_t;
+    using PackedGeometryID = std::uint32_t;
+#endif
 
 using EdgeWeight = osrm::Alias<std::int32_t, tag::edge_weight>;
 using EdgeDuration = osrm::Alias<std::int32_t, tag::edge_duration>;
@@ -118,6 +129,7 @@ using BearingClassID = std::uint32_t;
 using DiscreteBearing = std::uint16_t;
 using EntryClassID = std::uint16_t;
 
+static const NodeID MIN_NODEID = 0;
 static const NodeID SPECIAL_NODEID = std::numeric_limits<NodeID>::max();
 static const NodeID SPECIAL_SEGMENTID = std::numeric_limits<NodeID>::max() >> 1;
 static const PackedGeometryID SPECIAL_GEOMETRYID =
@@ -156,7 +168,7 @@ static const TurnPenalty MAXIMAL_TURN_PENALTY =
 
 using DatasourceID = std::uint8_t;
 
-using BisectionID = std::uint32_t;
+using BisectionID = std::uint64_t;
 using LevelID = std::uint8_t;
 using CellID = std::uint32_t;
 using PartitionID = std::uint64_t;
@@ -171,7 +183,11 @@ struct SegmentID
         BOOST_ASSERT(!enabled || id != SPECIAL_SEGMENTID);
     }
 
+    #ifdef USE_64BIT_IDS
+    NodeID id : 63;
+    #else
     NodeID id : 31;
+    #endif
     std::uint32_t enabled : 1;
 };
 
@@ -184,18 +200,26 @@ struct GeometryID
 {
     GeometryID(const PackedGeometryID id_, const bool forward_) : id{id_}, forward{forward_} {}
 
-    GeometryID() : id(std::numeric_limits<unsigned>::max() >> 1), forward(false) {}
+    GeometryID() : id(std::numeric_limits<PackedGeometryID>::max() >> 1), forward(false) {}
 
+    #ifdef USE_64BIT_IDS
+    PackedGeometryID id : 63;
+    #else
     PackedGeometryID id : 31;
+    #endif
     std::uint32_t forward : 1;
 };
 
-static_assert(sizeof(SegmentID) == 4, "SegmentID needs to be 4 bytes big");
+static_assert(sizeof(SegmentID) == 8, "SegmentID needs to be 8 bytes big");
 
 // Strongly connected component ID of an edge-based node
 struct ComponentID
 {
+    #ifdef USE_64BIT_IDS
+    std::uint64_t id : 63;
+    #else
     std::uint32_t id : 31;
+    #endif
     std::uint32_t is_tiny : 1;
 };
 

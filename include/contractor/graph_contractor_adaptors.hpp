@@ -145,7 +145,7 @@ template <class Edge, typename GraphT> inline std::vector<Edge> toEdges(GraphT g
         util::Percent p(log, graph.GetNumberOfNodes());
         const NodeID number_of_nodes = graph.GetNumberOfNodes();
         std::size_t edge_index = 0;
-        for (const auto node : util::irange(0u, number_of_nodes))
+        for (const auto node : util::irange(MIN_NODEID, number_of_nodes))
         {
             p.PrintStatus(node);
             for (auto edge : graph.GetAdjacentEdgeRange(node))

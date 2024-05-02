@@ -37,12 +37,12 @@ template <typename GraphT> class TarjanSCC
     struct TarjanNode
     {
         TarjanNode() : index(SPECIAL_NODEID), low_link(SPECIAL_NODEID), on_stack(false) {}
-        unsigned index;
-        unsigned low_link;
+        NodeID index;
+        NodeID low_link;
         bool on_stack;
     };
 
-    std::vector<unsigned> components_index;
+    std::vector<NodeID> components_index;
     std::vector<NodeID> component_size_vector;
     const GraphT &m_graph;
     std::size_t size_one_counter;
@@ -70,7 +70,7 @@ template <typename GraphT> class TarjanSCC
         unsigned large_component_count = 0;
         unsigned index = 0;
         std::vector<bool> processing_node_before_recursion(max_node_id, true);
-        for (const NodeID node : util::irange(0u, max_node_id))
+        for (const NodeID node : util::irange(MIN_NODEID, max_node_id))
         {
             if (SPECIAL_NODEID == components_index[node])
             {
@@ -86,7 +86,7 @@ template <typename GraphT> class TarjanSCC
 
                 const bool before_recursion = processing_node_before_recursion[v];
 
-                if (before_recursion && tarjan_node_list[v].index != UINT_MAX)
+                if (before_recursion && tarjan_node_list[v].index != SPECIAL_NODEID)
                 {
                     continue;
                 }

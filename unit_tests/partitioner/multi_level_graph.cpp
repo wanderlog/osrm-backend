@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(check_edges_sorting)
 
     auto graph = makeGraph(mlp, edges);
 
-    for (auto from : util::irange(0u, graph.GetNumberOfNodes()))
+    for (auto from : util::irange(MIN_NODEID, graph.GetNumberOfNodes()))
     {
         LevelID level = 0;
         for (auto edge : graph.GetAdjacentEdgeRange(from))

@@ -278,7 +278,7 @@ unsigned EdgeBasedGraphFactory::LabelEdgeBasedNodes()
 
     // renumber edge based node of outgoing edges
     unsigned numbered_edges_count = 0;
-    for (const auto current_node : util::irange(0u, m_node_based_graph.GetNumberOfNodes()))
+    for (const auto current_node : util::irange(MIN_NODEID, m_node_based_graph.GetNumberOfNodes()))
     {
         for (const auto current_edge : m_node_based_graph.GetAdjacentEdgeRange(current_node))
         {
@@ -318,7 +318,7 @@ EdgeBasedGraphFactory::GenerateEdgeExpandedNodes(const WayRestrictionMap &way_re
         // m_compressed_edge_container.InitializeBothwayVector();
 
         // loop over all edges and generate new set of nodes
-        for (const auto nbg_node_u : util::irange(0u, m_node_based_graph.GetNumberOfNodes()))
+        for (const auto nbg_node_u : util::irange(MIN_NODEID, m_node_based_graph.GetNumberOfNodes()))
         {
             BOOST_ASSERT(nbg_node_u != SPECIAL_NODEID);
             progress.PrintStatus(nbg_node_u);

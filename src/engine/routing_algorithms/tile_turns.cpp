@@ -11,7 +11,7 @@ namespace
 struct EdgeBasedNodeInfo
 {
     bool is_geometry_forward; // Is the geometry forward or reverse?
-    unsigned packed_geometry_id;
+    PackedGeometryID packed_geometry_id;
 };
 
 struct SegmentData

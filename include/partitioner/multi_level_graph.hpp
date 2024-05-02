@@ -75,7 +75,7 @@ class MultiLevelGraph : public util::StaticGraph<EdgeDataT, Ownership>
         // if the node ordering is sorting the border nodes first,
         // the id of the maximum border node will be rather low
         // enabling us to save some memory here
-        auto max_border_node_id = 0u;
+        NodeID max_border_node_id = 0;
         for (auto edge_index : util::irange<std::size_t>(0, edges.size()))
         {
             if (highest_border_level[edge_index] > 0)

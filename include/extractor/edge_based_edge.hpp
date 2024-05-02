@@ -57,10 +57,18 @@ struct EdgeBasedEdge
     NodeID target;
     EdgeData data;
 };
-static_assert(sizeof(extractor::EdgeBasedEdge) == 24,
-              "Size of extractor::EdgeBasedEdge type is "
-              "bigger than expected. This will influence "
-              "memory consumption.");
+
+#ifdef USE_64BIT_IDS
+    static_assert(sizeof(extractor::EdgeBasedEdge) == 40,
+                  "Size of extractor::EdgeBasedEdge type is "
+                  "bigger than expected. This will influence "
+                  "memory consumption.");
+#else
+    static_assert(sizeof(extractor::EdgeBasedEdge) == 24,
+                  "Size of extractor::EdgeBasedEdge type is "
+                  "bigger than expected. This will influence "
+                  "memory consumption.");
+#endif
 
 // Impl.
 

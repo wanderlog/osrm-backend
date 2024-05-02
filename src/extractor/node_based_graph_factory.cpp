@@ -47,7 +47,7 @@ void NodeBasedGraphFactory::BuildCompressedOutputGraph(const std::vector<NodeBas
 
     // check whether the graph is sane
     BOOST_ASSERT([this]() {
-        for (const auto nbg_node_u : util::irange(0u, compressed_output_graph.GetNumberOfNodes()))
+        for (const auto nbg_node_u : util::irange(MIN_NODEID, compressed_output_graph.GetNumberOfNodes()))
         {
             for (EdgeID nbg_edge_id : compressed_output_graph.GetAdjacentEdgeRange(nbg_node_u))
             {
@@ -87,7 +87,7 @@ void NodeBasedGraphFactory::Compress(ScriptingEnvironment &scripting_environment
 
 void NodeBasedGraphFactory::CompressGeometry()
 {
-    for (const auto nbg_node_u : util::irange(0u, compressed_output_graph.GetNumberOfNodes()))
+    for (const auto nbg_node_u : util::irange(MIN_NODEID, compressed_output_graph.GetNumberOfNodes()))
     {
         for (EdgeID nbg_edge_id : compressed_output_graph.GetAdjacentEdgeRange(nbg_node_u))
         {
@@ -164,7 +164,7 @@ void NodeBasedGraphFactory::CompressAnnotationData()
     std::set<AnnotationID, IndexComparator> unique_annotations(comparator);
 
     // first we mark entries, by setting their mapping to 0
-    for (const auto nbg_node_u : util::irange(0u, compressed_output_graph.GetNumberOfNodes()))
+    for (const auto nbg_node_u : util::irange(MIN_NODEID, compressed_output_graph.GetNumberOfNodes()))
     {
         BOOST_ASSERT(nbg_node_u != SPECIAL_NODEID);
         for (EdgeID nbg_edge_id : compressed_output_graph.GetAdjacentEdgeRange(nbg_node_u))
@@ -183,7 +183,7 @@ void NodeBasedGraphFactory::CompressAnnotationData()
         cached_ids[id] = new_id++;
 
     // apply the mapping
-    for (const auto nbg_node_u : util::irange(0u, compressed_output_graph.GetNumberOfNodes()))
+    for (const auto nbg_node_u : util::irange(MIN_NODEID, compressed_output_graph.GetNumberOfNodes()))
     {
         BOOST_ASSERT(nbg_node_u != SPECIAL_NODEID);
         for (EdgeID nbg_edge_id : compressed_output_graph.GetAdjacentEdgeRange(nbg_node_u))

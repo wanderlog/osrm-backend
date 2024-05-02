@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
     tools::FeatureWriter writer{outfile};
 
-    for (const NodeID source : osrm::util::irange(0u, graph->GetNumberOfNodes()))
+    for (const NodeID source : osrm::util::irange(MIN_NODEID, graph->GetNumberOfNodes()))
     {
         for (const auto current_edge : graph->GetAdjacentEdgeRange(source))
         {

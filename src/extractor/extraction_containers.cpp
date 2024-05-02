@@ -503,7 +503,9 @@ void ExtractionContainers::PrepareNodes()
         if (used_node_id_list.size() > std::numeric_limits<NodeID>::max())
         {
             throw util::exception("There are too many nodes remaining after filtering, OSRM only "
-                                  "supports 2^32 unique nodes, but there were " +
+                                  "supports " +
+                                  std::to_string(std::numeric_limits<NodeID>::max()) + " unique nodes, "
+                                  "but there were " +
                                   std::to_string(used_node_id_list.size()) + SOURCE_REF);
         }
         max_internal_node_id = boost::numeric_cast<std::uint64_t>(used_node_id_list.size());
@@ -872,9 +874,12 @@ void ExtractionContainers::PrepareEdges(ScriptingEnvironment &scripting_environm
             used_edges.push_back(edge.result);
         }
 
-        if (used_edges.size() > std::numeric_limits<uint32_t>::max())
+        if (used_edges.size() > std::numeric_limits<EdgeID>::max())
         {
-            throw util::exception("There are too many edges, OSRM only supports 2^32" + SOURCE_REF);
+            throw util::exception(
+                "There are too many edges, OSRM only supports " +
+                std::to_string(std::numeric_limits<EdgeID>::max()) + SOURCE_REF
+            );
         }
 
         TIMER_STOP(write_edges);

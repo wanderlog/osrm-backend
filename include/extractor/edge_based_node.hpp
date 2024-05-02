@@ -10,7 +10,11 @@ struct EdgeBasedNode
 {
     GeometryID geometry_id;
     ComponentID component_id;
-    std::uint32_t annotation_id : 31;
+    #ifdef USE_64BIT_IDS
+    AnnotationID annotation_id : 63;
+    #else
+    AnnotationID annotation_id : 31;
+    #endif
     std::uint32_t segregated : 1;
 };
 

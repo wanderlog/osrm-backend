@@ -56,7 +56,7 @@ inline IntermediateIntersection getInvalidIntersection()
 struct RouteStep
 {
     NodeID from_id;
-    unsigned name_id;
+    NameID name_id;
     bool is_segregated;
     std::string name;
     std::string ref;

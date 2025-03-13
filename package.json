@@ -1,6 +1,6 @@
 {
   "name": "@project-osrm/osrm",
-  "version": "5.28.0-unreleased",
+  "version": "5.28.0-wanderlog.1",
   "private": false,
   "description": "The Open Source Routing Machine is a high performance routing engine written in C++ designed to run on OpenStreetMap data.",
   "dependencies": {
@@ -76,7 +76,7 @@
     "module_name": "node_osrm",
     "module_path": "./lib/binding_napi_v{napi_build_version}/",
     "host": "https://github.com",
-    "remote_path": "./Project-OSRM/osrm-backend/releases/download/v{version}/",
+    "remote_path": "./wanderlog/osrm-backend/releases/download/v{version}/",
     "package_name": "{module_name}-v{version}-{napi_build_version}-{platform}-{arch}-{configuration}.tar.gz"
   },
   "publishConfig": {

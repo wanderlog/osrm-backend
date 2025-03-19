@@ -76,7 +76,7 @@
     "module_name": "node_osrm",
     "module_path": "./lib/binding_napi_v{napi_build_version}/",
     "host": "https://github.com",
-    "remote_path": "./Project-OSRM/osrm-backend/releases/download/v{version}/",
+    "remote_path": "./wanderlog/osrm-backend/releases/download/v{version}/",
     "package_name": "{module_name}-v{version}-{napi_build_version}-{platform}-{arch}-{configuration}.tar.gz"
   },
   "publishConfig": {

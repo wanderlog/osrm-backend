@@ -76,11 +76,16 @@ struct Hint
     static Hint FromBase64(const std::string &base64Hint);
 };
 
+#ifdef USE_64BIT_IDS
+static_assert(sizeof(SegmentHint) == 96 + 8, "Hint is bigger than expected");
+// 140 == ceil(104 / 3) * 4 since we use integer division
+constexpr std::size_t ENCODED_SEGMENT_HINT_SIZE = 140;
+#else
 static_assert(sizeof(SegmentHint) == 80 + 4, "Hint is bigger than expected");
 constexpr std::size_t ENCODED_SEGMENT_HINT_SIZE = 112;
+#endif
 static_assert(ENCODED_SEGMENT_HINT_SIZE / 4 * 3 >= sizeof(SegmentHint),
               "ENCODED_SEGMENT_HINT_SIZE does not match size of SegmentHint");
-
 } // namespace osrm::engine
 
 #endif

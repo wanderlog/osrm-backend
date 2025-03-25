@@ -33,8 +33,8 @@ class GraphCompressor
                   CompressedEdgeContainer &geometry_compressor);
 
   private:
-    void PrintStatistics(unsigned original_number_of_nodes,
-                         unsigned original_number_of_edges,
+    void PrintStatistics(NodeID original_number_of_nodes,
+                         EdgeID original_number_of_edges,
                          const util::NodeBasedDynamicGraph &graph) const;
 };
 } // namespace osrm::extractor

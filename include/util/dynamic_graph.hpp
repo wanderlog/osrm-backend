@@ -45,8 +45,8 @@ template <typename EdgeDataT> class DynamicGraph
 {
   public:
     using EdgeData = EdgeDataT;
-    using NodeIterator = std::uint32_t;
-    using EdgeIterator = std::uint32_t;
+    using NodeIterator = NodeID;
+    using EdgeIterator = EdgeID;
     using EdgeRange = range<EdgeIterator>;
 
     using Node = detail::DynamicNode<EdgeIterator>;
@@ -105,7 +105,7 @@ template <typename EdgeDataT> class DynamicGraph
         node_array.resize(number_of_nodes);
         EdgeIterator edge = 0;
         EdgeIterator position = 0;
-        for (const auto node : irange(0u, number_of_nodes))
+        for (const auto node : irange(MIN_NODEID, number_of_nodes))
         {
             EdgeIterator last_edge = edge;
             while (edge < number_of_edges && graph[edge].source == node)
@@ -119,7 +119,7 @@ template <typename EdgeDataT> class DynamicGraph
         edge_list.reserve(static_cast<std::size_t>(edge_list.size() * 1.1));
         edge_list.resize(position);
         edge = 0;
-        for (const auto node : irange(0u, number_of_nodes))
+        for (const auto node : irange(MIN_NODEID, number_of_nodes))
         {
             for (const auto i : irange(node_array[node].first_edge,
                                        node_array[node].first_edge + node_array[node].edges))
@@ -141,7 +141,7 @@ template <typename EdgeDataT> class DynamicGraph
     {
         number_of_nodes = other.number_of_nodes;
         // atomics can't be moved this is why we need an own constructor
-        number_of_edges = static_cast<std::uint32_t>(other.number_of_edges);
+        number_of_edges = static_cast<EdgeID>(other.number_of_edges);
 
         node_array = other.node_array;
         edge_list = other.edge_list;
@@ -158,7 +158,7 @@ template <typename EdgeDataT> class DynamicGraph
     {
         number_of_nodes = other.number_of_nodes;
         // atomics can't be moved this is why we need an own constructor
-        number_of_edges = static_cast<std::uint32_t>(other.number_of_edges);
+        number_of_edges = static_cast<EdgeID>(other.number_of_edges);
 
         node_array = std::move(other.node_array);
         edge_list = std::move(other.edge_list);
@@ -168,7 +168,7 @@ template <typename EdgeDataT> class DynamicGraph
     {
         number_of_nodes = other.number_of_nodes;
         // atomics can't be moved this is why we need an own constructor
-        number_of_edges = static_cast<std::uint32_t>(other.number_of_edges);
+        number_of_edges = static_cast<EdgeID>(other.number_of_edges);
 
         node_array = std::move(other.node_array);
         edge_list = std::move(other.edge_list);
@@ -184,7 +184,7 @@ template <typename EdgeDataT> class DynamicGraph
         DynamicGraph other;
 
         other.number_of_nodes = number_of_nodes;
-        other.number_of_edges = static_cast<std::uint32_t>(number_of_edges);
+        other.number_of_edges = static_cast<EdgeID>(number_of_edges);
         other.edge_list.reserve(edge_list.size());
         other.node_array.resize(node_array.size());
 
@@ -212,9 +212,9 @@ template <typename EdgeDataT> class DynamicGraph
         return other;
     }
 
-    unsigned GetNumberOfNodes() const { return number_of_nodes; }
+    NodeIterator GetNumberOfNodes() const { return number_of_nodes; }
 
-    unsigned GetNumberOfEdges() const { return number_of_edges; }
+    EdgeIterator GetNumberOfEdges() const { return number_of_edges; }
     auto GetEdgeCapacity() const { return edge_list.size(); }
 
     unsigned GetOutDegree(const NodeIterator n) const { return node_array[n].edges; }
@@ -461,7 +461,7 @@ template <typename EdgeDataT> class DynamicGraph
     }
 
     NodeIterator number_of_nodes;
-    std::atomic_uint number_of_edges;
+    AtomicEdgeID number_of_edges;
 
     std::vector<Node> node_array;
     DeallocatingVector<Edge> edge_list;

@@ -92,7 +92,11 @@ struct RemainingNodeData
 {
     RemainingNodeData() = default;
     RemainingNodeData(NodeID id, bool is_independent) : id(id), is_independent(is_independent) {}
+    #ifdef USE_64BIT_IDS
+    NodeID id : 63;
+    #else
     NodeID id : 31;
+    #endif
     bool is_independent : 1;
 };
 

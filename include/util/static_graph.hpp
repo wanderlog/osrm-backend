@@ -133,7 +133,7 @@ class StaticGraph
 
     StaticGraph() {}
 
-    template <typename ContainerT> StaticGraph(const std::uint32_t nodes, const ContainerT &edges)
+    template <typename ContainerT> StaticGraph(const NodeID nodes, const ContainerT &edges)
     {
         BOOST_ASSERT(std::is_sorted(const_cast<ContainerT &>(edges).begin(),
                                     const_cast<ContainerT &>(edges).end()));
@@ -152,9 +152,9 @@ class StaticGraph
         BOOST_ASSERT(number_of_nodes == node_array.size() - 1);
     }
 
-    unsigned GetNumberOfNodes() const { return number_of_nodes; }
+    NodeID GetNumberOfNodes() const { return number_of_nodes; }
 
-    unsigned GetNumberOfEdges() const { return number_of_edges; }
+    EdgeID GetNumberOfEdges() const { return number_of_edges; }
 
     unsigned GetOutDegree(const NodeIterator n) const { return EndEdges(n) - BeginEdges(n); }
 
@@ -284,14 +284,14 @@ class StaticGraph
 
   protected:
     template <typename IterT>
-    void InitializeFromSortedEdgeRange(const std::uint32_t nodes, IterT begin, IterT end)
+    void InitializeFromSortedEdgeRange(const NodeID nodes, IterT begin, IterT end)
     {
         number_of_nodes = nodes;
         number_of_edges = static_cast<EdgeIterator>(std::distance(begin, end));
         node_array.reserve(number_of_nodes + 1);
-        node_array.push_back(NodeArrayEntry{0u});
+        node_array.push_back(NodeArrayEntry{MIN_NODEID});
         auto iter = begin;
-        for (auto node : util::irange(0u, nodes))
+        for (auto node : util::irange(MIN_NODEID, nodes))
         {
             iter =
                 std::find_if(iter, end, [node](const auto &edge) { return edge.source != node; });

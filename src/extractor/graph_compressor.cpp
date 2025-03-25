@@ -28,8 +28,8 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
                                const std::vector<NodeBasedEdgeAnnotation> &node_data_container,
                                CompressedEdgeContainer &geometry_compressor)
 {
-    const unsigned original_number_of_nodes = graph.GetNumberOfNodes();
-    const unsigned original_number_of_edges = graph.GetNumberOfEdges();
+    const NodeID original_number_of_nodes = graph.GetNumberOfNodes();
+    const EdgeID original_number_of_edges = graph.GetNumberOfEdges();
 
     TurnPathCompressor turn_path_compressor(turn_restrictions, maneuver_overrides);
 
@@ -65,7 +65,7 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
         util::UnbufferedLog log;
         util::Percent progress(log, original_number_of_nodes);
 
-        for (const NodeID node_v : util::irange(0u, original_number_of_nodes))
+        for (const NodeID node_v : util::irange(MIN_NODEID, original_number_of_nodes))
         {
             progress.PrintStatus(node_v);
 
@@ -387,7 +387,7 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
     // Repeate the loop, but now add all edges as uncompressed values.
     // The function AddUncompressedEdge does nothing if the edge is already
     // in the CompressedEdgeContainer.
-    for (const NodeID node_u : util::irange(0u, original_number_of_nodes))
+    for (const NodeID node_u : util::irange(MIN_NODEID, original_number_of_nodes))
     {
         for (const auto edge_id : util::irange(graph.BeginEdges(node_u), graph.EndEdges(node_u)))
         {
@@ -398,15 +398,15 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
     }
 }
 
-void GraphCompressor::PrintStatistics(unsigned original_number_of_nodes,
-                                      unsigned original_number_of_edges,
+void GraphCompressor::PrintStatistics(NodeID original_number_of_nodes,
+                                      EdgeID original_number_of_edges,
                                       const util::NodeBasedDynamicGraph &graph) const
 {
 
-    unsigned new_node_count = 0;
-    unsigned new_edge_count = 0;
+    NodeID new_node_count = 0;
+    EdgeID new_edge_count = 0;
 
-    for (const auto i : util::irange(0u, graph.GetNumberOfNodes()))
+    for (const auto i : util::irange(MIN_NODEID, graph.GetNumberOfNodes()))
     {
         if (graph.GetOutDegree(i) > 0)
         {

@@ -32,7 +32,7 @@ struct NamedSegment
 {
     EdgeDuration duration;
     std::uint32_t position;
-    std::uint32_t name_id;
+    NameID name_id;
 };
 
 template <std::size_t SegmentNumber>

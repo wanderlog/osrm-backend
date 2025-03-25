@@ -159,7 +159,7 @@ std::vector<CompressedNodeBasedGraphEdge> toEdgeList(const util::NodeBasedDynami
     edges.reserve(graph.GetNumberOfEdges());
 
     // For all nodes iterate over its edges and dump (from, to) pairs
-    for (const NodeID from_node : util::irange(0u, graph.GetNumberOfNodes()))
+    for (const NodeID from_node : util::irange(MIN_NODEID, graph.GetNumberOfNodes()))
     {
         for (const EdgeID edge : graph.GetAdjacentEdgeRange(from_node))
         {

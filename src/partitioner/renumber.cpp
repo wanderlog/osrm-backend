@@ -36,10 +36,10 @@ std::vector<LevelID> getHighestBorderLevel(const DynamicEdgeBasedGraph &graph,
 }
 } // namespace
 
-std::vector<std::uint32_t> makePermutation(const DynamicEdgeBasedGraph &graph,
+std::vector<NodeID> makePermutation(const DynamicEdgeBasedGraph &graph,
                                            const std::vector<Partition> &partitions)
 {
-    std::vector<std::uint32_t> ordering(graph.GetNumberOfNodes());
+    std::vector<NodeID> ordering(graph.GetNumberOfNodes());
     std::iota(ordering.begin(), ordering.end(), 0);
 
     // Sort the nodes by cell ID recursively:

@@ -46,7 +46,7 @@ class CompressedEdgeContainer
                              const EdgeDuration duration);
 
     void InitializeBothwayVector();
-    unsigned ZipEdges(const unsigned f_edge_pos, const unsigned r_edge_pos);
+    unsigned ZipEdges(const EdgeID f_edge_pos, const EdgeID r_edge_pos);
 
     bool HasEntryForID(const EdgeID edge_id) const;
     bool HasZippedEntryForForwardID(const EdgeID edge_id) const;

@@ -102,13 +102,13 @@ struct NodeBasedEdge
 
     bool operator<(const NodeBasedEdge &other) const;
 
-    NodeID source;                     // 32 4
-    NodeID target;                     // 32 4
+    NodeID source;                     // 64 8
+    NodeID target;                     // 64 8
     EdgeWeight weight;                 // 32 4
     EdgeDuration duration;             // 32 4
     EdgeDistance distance;             // 32 4
-    GeometryID geometry_id;            // 32 4
-    AnnotationID annotation_data;      // 32 4
+    GeometryID geometry_id;            // 64 8
+    AnnotationID annotation_data;      // 64 8
     NodeBasedEdgeClassification flags; // 32 4
 };
 
@@ -200,10 +200,17 @@ inline NodeBasedEdgeWithOSM::NodeBasedEdgeWithOSM()
 {
 }
 
+#ifdef USE_64BIT_IDS
+static_assert(sizeof(extractor::NodeBasedEdge) == 56,
+              "Size of extractor::NodeBasedEdge type is "
+              "bigger than expected. This will influence "
+              "memory consumption.");
+#else
 static_assert(sizeof(extractor::NodeBasedEdge) == 32,
               "Size of extractor::NodeBasedEdge type is "
               "bigger than expected. This will influence "
               "memory consumption.");
+#endif
 
 } // namespace osrm::extractor
 

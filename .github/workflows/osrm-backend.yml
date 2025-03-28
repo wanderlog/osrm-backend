@@ -297,7 +297,7 @@ jobs:
             build_node_package: true
             continue-on-error: false
             node: 22
-            runs-on: ubuntu-24.04
+            runs-on: ubuntu-20.04
             BUILD_TYPE: Release
             CCOMPILER: clang-16
             CXXCOMPILER: clang++-16
@@ -444,6 +444,15 @@ jobs:
         elif [[ "${RUNNER_OS}" == "macOS" ]]; then
           brew install ccache
         fi
+
+        # clang
+        if [[ "${CCOMPILER}" == "clang-16" ]]; then
+           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+           sudo apt-get update -y && sudo apt-get install software-properties-common
+           sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main'
+           sudo apt-get update -y && sudo apt-get install clang++-16 clang-tidy-16
+           sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-16 100000
+         fi
 
         # Linux dev packages
         if [ "${ENABLE_CONAN}" != "ON" ]; then
@@ -603,6 +612,6 @@ jobs:
 
   ci-complete:
     runs-on: ubuntu-latest
-    needs: [build-matrix, conan-windows-release-node, docker-image-matrix]
+    needs: [build-matrix, conan-windows-release-node]
     steps:
     - run: echo "CI complete"

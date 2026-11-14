@@ -1,5 +1,5 @@
 {
-  "name": "@project-osrm/osrm",
+  "name": "@wanderlogapp/osrm",
   "version": "6.0.0-wanderlog.6",
   "private": false,
   "description": "The Open Source Routing Machine is a high performance routing engine written in C++ designed to run on OpenStreetMap data.",

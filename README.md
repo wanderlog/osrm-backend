@@ -3,6 +3,37 @@
 Start here for details on how we use it and instructions on how to build it:
 https://www.notion.so/wanderlog/OSRM-Open-Source-Routing-Machine-osrm-backend-25ec8ec869b7401881299011d48f9aa6#3c6bfb0b145149c7b821b37caa06e7fa
 
+### Publishing to npm
+
+We publish this fork as
+[`@wanderlogapp/osrm`](https://www.npmjs.com/package/@wanderlogapp/osrm).
+After you release a new version using the Notion doc above, make sure
+`npm whoami` prints `wanderlogapp` (if not, run `npm login`), then run:
+
+```shell
+VERSION='<the version you just released>' # e.g., VERSION='v6.0.0-wanderlog.9'
+
+# Make sure wanderlog-node-built has the latest release locally
+git fetch --tags
+git checkout wanderlog-node-built
+git reset --hard "$VERSION"
+
+# Rename the package for npm, and set its version (without the leading v)
+npm pkg set name='@wanderlogapp/osrm' version="${VERSION#v}"
+
+# Commit and push the rename, so wanderlog-node-built matches what's on npm
+git commit -am "[$VERSION] Publish to npm as @wanderlogapp/osrm"
+git push -f origin wanderlog-node-built
+
+# Publish to npm. --ignore-scripts skips the package's build and install
+# scripts, since the built files are already committed
+npm publish --access public --ignore-scripts
+```
+
+Then, in itineraries, bump the version in the `npm:@wanderlogapp/osrm@…`
+alias and run `yarn install`. New `@wanderlogapp/*` versions skip the
+one-week age gate because of `npmPreapprovedPackages` in `.yarnrc.yml`.
+
 ## Open Source Routing Machine
 
 
